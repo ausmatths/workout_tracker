@@ -9,27 +9,27 @@ final mockWorkouts = [
     results: [
       ExerciseResult(
         exercise: Exercise(
-          name: 'Push-ups',
-          targetOutput: 20,
+          name: 'Basketball Free Throws',
+          targetOutput: 10,
           unit: Unit.repetitions,
         ),
-        actualOutput: 22,
+        actualOutput: 8,
       ),
       ExerciseResult(
         exercise: Exercise(
-          name: 'Plank',
-          targetOutput: 60,
-          unit: Unit.seconds,
-        ),
-        actualOutput: 45,
-      ),
-      ExerciseResult(
-        exercise: Exercise(
-          name: 'Running',
-          targetOutput: 1000,
+          name: 'Swimming Laps',
+          targetOutput: 500,
           unit: Unit.meters,
         ),
-        actualOutput: 1200,
+        actualOutput: 550,
+      ),
+      ExerciseResult(
+        exercise: Exercise(
+          name: 'Tennis Practice',
+          targetOutput: 1800,
+          unit: Unit.seconds,
+        ),
+        actualOutput: 1920,
       ),
     ],
   ),
@@ -38,19 +38,27 @@ final mockWorkouts = [
     results: [
       ExerciseResult(
         exercise: Exercise(
-          name: 'Squats',
-          targetOutput: 15,
+          name: 'Soccer Ball Juggling',
+          targetOutput: 30,
           unit: Unit.repetitions,
         ),
-        actualOutput: 15,
+        actualOutput: 35,
       ),
       ExerciseResult(
         exercise: Exercise(
-          name: 'Wall Sit',
-          targetOutput: 30,
-          unit: Unit.seconds,
+          name: 'Sprint Training',
+          targetOutput: 100,
+          unit: Unit.meters,
         ),
-        actualOutput: 25,
+        actualOutput: 100,
+      ),
+      ExerciseResult(
+        exercise: Exercise(
+          name: 'Table Tennis Rally',
+          targetOutput: 50,
+          unit: Unit.repetitions,
+        ),
+        actualOutput: 45,
       ),
     ],
   ),
