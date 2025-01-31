@@ -89,27 +89,38 @@ class _DistanceInputState extends State<DistanceInput> {
             ),
             const SizedBox(height: 16),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _QuickSetButton(
-                  value: 100,
-                  isSelected: _currentValue == 100,
-                  onTap: () => _updateValue(100),
+                Flexible(
+                  child: _QuickSetButton(
+                    value: 100,
+                    isSelected: _currentValue == 100,
+                    onTap: () => _updateValue(100),
+                  ),
                 ),
-                _QuickSetButton(
-                  value: 200,
-                  isSelected: _currentValue == 200,
-                  onTap: () => _updateValue(200),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: _QuickSetButton(
+                    value: 200,
+                    isSelected: _currentValue == 200,
+                    onTap: () => _updateValue(200),
+                  ),
                 ),
-                _QuickSetButton(
-                  value: 500,
-                  isSelected: _currentValue == 500,
-                  onTap: () => _updateValue(500),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: _QuickSetButton(
+                    value: 500,
+                    isSelected: _currentValue == 500,
+                    onTap: () => _updateValue(500),
+                  ),
                 ),
-                _QuickSetButton(
-                  value: 1000,
-                  isSelected: _currentValue == 1000,
-                  onTap: () => _updateValue(1000),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: _QuickSetButton(
+                    value: 1000,
+                    isSelected: _currentValue == 1000,
+                    onTap: () => _updateValue(1000),
+                  ),
                 ),
               ],
             ),
@@ -138,7 +149,7 @@ class _QuickSetButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: 12,
+          horizontal: 8,
           vertical: 8,
         ),
         decoration: BoxDecoration(
@@ -147,11 +158,15 @@ class _QuickSetButton extends StatelessWidget {
               : Theme.of(context).primaryColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(
-          '${value.toInt()}m',
-          style: TextStyle(
-            color: isSelected ? Colors.white : Theme.of(context).primaryColor,
-            fontWeight: FontWeight.bold,
+        child: FittedBox(
+          // Added to ensure text fits
+          fit: BoxFit.scaleDown,
+          child: Text(
+            '${value.toInt()}m',
+            style: TextStyle(
+              color: isSelected ? Colors.white : Theme.of(context).primaryColor,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

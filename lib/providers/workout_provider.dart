@@ -47,7 +47,7 @@ class WorkoutProvider with ChangeNotifier {
     double completionRate = (successfulResults / totalResults) * 100;
     double averagePercentage = totalPercentage / totalResults;
 
-    // Weight completion rate more heavily than overachievement
+    // Weight completion rate more heavily than over achievement
     return (completionRate * 0.6 + averagePercentage * 0.4).clamp(0.0, 100.0);
   }
 }

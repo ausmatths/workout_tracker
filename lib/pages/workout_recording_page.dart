@@ -163,13 +163,23 @@ class _WorkoutRecordingPageState extends State<WorkoutRecordingPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Progress: ${completionPercentage.toInt()}%',
-                    style: Theme.of(context).textTheme.titleMedium,
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Progress: ${completionPercentage.toInt()}%',
+                      style: Theme.of(context).textTheme.titleMedium,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  Text(
-                    '${_results.length}/${widget.workoutPlan.exercises.length} exercises',
-                    style: Theme.of(context).textTheme.titleMedium,
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      '${_results.length}/${widget.workoutPlan.exercises.length} exercises',
+                      style: Theme.of(context).textTheme.titleMedium,
+                      textAlign: TextAlign.right,
+                      overflow: TextOverflow.ellipsis, // Add this
+                    ),
                   ),
                 ],
               ),

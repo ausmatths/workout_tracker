@@ -45,12 +45,16 @@ class WorkoutCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    DateFormat.yMMMd().format(workout.date),
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                  Expanded(
+                    child: Text(
+                      DateFormat.yMMMd().format(workout.date),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
+                  const SizedBox(width: 8), // Add spacing
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
