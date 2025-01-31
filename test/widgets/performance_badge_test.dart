@@ -30,7 +30,6 @@ void main() {
     testWidgets(
       'displays metric based on recent workouts',
       (WidgetTester tester) async {
-        // Create test workouts from the past week
         final workouts = [
           Workout(
             date: DateTime.now().subtract(const Duration(days: 1)),
@@ -60,7 +59,6 @@ void main() {
           ),
         ];
 
-        // Add workouts to provider
         for (final workout in workouts) {
           workoutProvider.addWorkout(workout);
         }
@@ -68,14 +66,11 @@ void main() {
         await tester.pumpWidget(createPerformanceBadge());
         await tester.pumpAndSettle();
 
-        // Verify title is shown
         expect(find.text('Recent Performance'), findsOneWidget);
 
-        // Verify some performance score is shown
         expect(
           find.byWidgetPredicate((widget) {
             if (widget is Text) {
-              // Match any percentage format (e.g., "90.0%", "85.0%", etc.)
               return RegExp(r'\d+\.\d+%').hasMatch(widget.data ?? '');
             }
             return false;
@@ -88,7 +83,6 @@ void main() {
     testWidgets(
       'displays default message when no recent workouts exist',
       (WidgetTester tester) async {
-        // Create an old workout (more than 7 days ago)
         final oldWorkout = Workout(
           date: DateTime.now().subtract(const Duration(days: 8)),
           results: [
@@ -103,16 +97,13 @@ void main() {
           ],
         );
 
-        // Add old workout to provider
         workoutProvider.addWorkout(oldWorkout);
 
         await tester.pumpWidget(createPerformanceBadge());
         await tester.pumpAndSettle();
 
-        // Verify title is shown
         expect(find.text('Recent Performance'), findsOneWidget);
 
-        // Verify default message is shown
         expect(find.text('No recent workouts'), findsOneWidget);
       },
     );
@@ -120,14 +111,11 @@ void main() {
     testWidgets(
       'updates when new workouts are added',
       (WidgetTester tester) async {
-        // Start with no workouts
         await tester.pumpWidget(createPerformanceBadge());
         await tester.pumpAndSettle();
 
-        // Verify initial state
         expect(find.text('No recent workouts'), findsOneWidget);
 
-        // Add a new workout
         final newWorkout = Workout(
           date: DateTime.now(),
           results: [
@@ -145,7 +133,6 @@ void main() {
         workoutProvider.addWorkout(newWorkout);
         await tester.pumpAndSettle();
 
-        // Verify the badge updates
         expect(find.text('No recent workouts'), findsNothing);
         expect(
           find.byWidgetPredicate((widget) {

@@ -109,16 +109,12 @@ void main() {
     testWidgets(
       'shows a separate input for each exercise in the workout plan',
       (WidgetTester tester) async {
-        // Set a larger surface size to ensure more widgets are visible
         await tester.binding.setSurfaceSize(const Size(400, 800));
 
-        // Build the widget
         await tester.pumpWidget(createWorkoutRecordingPage());
-        await tester.pumpAndSettle(); // Wait for animations to complete
+        await tester.pumpAndSettle();
 
-        // Verify each exercise has its corresponding input widget
         for (final exercise in testWorkoutPlan.exercises) {
-          // Scroll until the exercise is visible
           await tester.dragUntilVisible(
             find.byKey(ValueKey(exercise.name)),
             find.byType(ListView),
@@ -126,10 +122,8 @@ void main() {
           );
           await tester.pumpAndSettle();
 
-          // Now verify the widget
           expect(find.byKey(ValueKey(exercise.name)), findsOneWidget);
 
-          // Verify correct input type is shown for each exercise
           switch (exercise.unit) {
             case Unit.repetitions:
               expect(
@@ -164,7 +158,6 @@ void main() {
           }
         }
 
-        // Scroll back to top to count total widgets
         await tester.dragUntilVisible(
           find.byKey(ValueKey(testWorkoutPlan.exercises.first.name)),
           find.byType(ListView),
@@ -172,7 +165,6 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        // Count the widgets of each type
         int repetitionCount = 0;
         int distanceCount = 0;
         int durationCount = 0;
@@ -207,7 +199,6 @@ void main() {
     testWidgets(
       'adds Workout to shared state when user completes workout',
       (WidgetTester tester) async {
-        // Set up a WorkoutProvider with a listener to track added workouts
         late Workout addedWorkout;
         final workoutProvider = WorkoutProvider();
         workoutProvider.addListener(() {
@@ -225,10 +216,8 @@ void main() {
           ),
         ));
 
-        // Map to store expected values for verification
         final Map<String, double> expectedValues = {};
 
-        // Fill out each exercise
         for (final exercise in testWorkoutPlan.exercises) {
           await tester.dragUntilVisible(
             find.byKey(ValueKey(exercise.name)),
@@ -257,7 +246,6 @@ void main() {
               break;
 
             case Unit.seconds:
-              // Find minutes and seconds fields
               final minutesField = find.descendant(
                 of: find.byKey(ValueKey(exercise.name)),
                 matching: find.widgetWithText(TextField, 'Minutes'),
@@ -267,17 +255,14 @@ void main() {
                 matching: find.widgetWithText(TextField, 'Seconds'),
               );
 
-              // Enter 1 minute and 30 seconds
               await tester.enterText(minutesField, '1');
               await tester.enterText(secondsField, '30');
-              expectedValues[exercise.name] =
-                  90.0; // 1 minute 30 seconds = 90 seconds
+              expectedValues[exercise.name] = 90.0;
               break;
           }
           await tester.pumpAndSettle();
         }
 
-        // Complete the workout
         final completeButton = find.byIcon(Icons.check);
         expect(completeButton, findsOneWidget);
         await tester.tap(completeButton);
@@ -290,11 +275,9 @@ void main() {
         await tester.tap(dialogCompleteButton);
         await tester.pumpAndSettle();
 
-        // Verify workout was added
         expect(workoutProvider.workouts.length, 1);
         expect(addedWorkout.results.length, testWorkoutPlan.exercises.length);
 
-        // Verify each exercise result matches expected value
         for (final result in addedWorkout.results) {
           final expectedValue = expectedValues[result.exercise.name];
           expect(result.actualOutput, expectedValue,
@@ -302,7 +285,6 @@ void main() {
                   'Exercise ${result.exercise.name} should have value $expectedValue but was ${result.actualOutput}');
         }
 
-        // Verify navigation
         expect(find.byType(WorkoutRecordingPage), findsNothing);
       },
     );
@@ -310,7 +292,6 @@ void main() {
     testWidgets(
       'shows multiple entries when there are multiple Workouts in shared state',
       (WidgetTester tester) async {
-        // Set up test data with different success rates
         final testWorkouts = [
           Workout(
             date: DateTime(2025, 1, 14),
@@ -321,7 +302,7 @@ void main() {
                   targetOutput: 10,
                   unit: Unit.repetitions,
                 ),
-                actualOutput: 10, // Successfully completed
+                actualOutput: 10,
               ),
               ExerciseResult(
                 exercise: Exercise(
@@ -329,7 +310,7 @@ void main() {
                   targetOutput: 500,
                   unit: Unit.meters,
                 ),
-                actualOutput: 500, // Successfully completed
+                actualOutput: 500,
               ),
             ],
           ),
@@ -342,7 +323,7 @@ void main() {
                   targetOutput: 1800,
                   unit: Unit.seconds,
                 ),
-                actualOutput: 1500, // Not completed successfully
+                actualOutput: 1500,
               ),
               ExerciseResult(
                 exercise: Exercise(
@@ -350,13 +331,12 @@ void main() {
                   targetOutput: 30,
                   unit: Unit.repetitions,
                 ),
-                actualOutput: 20, // Not completed successfully
+                actualOutput: 20,
               ),
             ],
           ),
         ];
 
-        // Create and populate provider
         final workoutProvider = WorkoutProvider();
         for (final workout in testWorkouts) {
           workoutProvider.addWorkout(workout);
@@ -373,26 +353,20 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        // Verify AppBar title
         expect(find.text('Workout History'), findsOneWidget);
 
-        // Verify PerformanceBadge is shown
         expect(find.byType(PerformanceBadge), findsOneWidget);
 
-        // Verify all workout cards are shown
         expect(find.byType(WorkoutCard), findsNWidgets(testWorkouts.length));
 
-        // Verify each workout's data is displayed
         for (int i = 0; i < testWorkouts.length; i++) {
           final workout = testWorkouts[i];
 
-          // Verify date
           expect(
             find.text(DateFormat.yMMMd().format(workout.date)),
             findsOneWidget,
           );
 
-          // Verify workout card content
           expect(
             find.byWidgetPredicate(
               (widget) => widget is WorkoutCard && widget.workout == workout,
@@ -400,7 +374,6 @@ void main() {
             findsOneWidget,
           );
 
-          // Find the specific card's success rate using widget ancestor finder
           final successRate =
               (workout.successfulExercises / workout.totalExercises * 100)
                   .round();
@@ -415,16 +388,13 @@ void main() {
           );
         }
 
-        // Verify add workout button is present
         expect(find.byType(FloatingActionButton), findsOneWidget);
         expect(find.byIcon(Icons.add), findsOneWidget);
 
-        // Verify navigation works
         final firstCard = find.byType(WorkoutCard).first;
         await tester.tap(firstCard);
         await tester.pumpAndSettle();
 
-        // Verify we navigated to details page
         expect(find.byType(WorkoutDetailsPage), findsOneWidget);
       },
     );
@@ -469,42 +439,34 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        // Verify page title with date
         expect(
           find.text('Workout - ${DateFormat.yMMMd().format(testWorkout.date)}'),
           findsOneWidget,
         );
 
-        // Verify all exercise result cards are shown
         expect(find.byType(ExerciseResultCard),
             findsNWidgets(testWorkout.results.length));
 
-        // Verify each exercise's details
         for (final result in testWorkout.results) {
-          // Exercise name
           expect(find.text(result.exercise.name), findsOneWidget);
 
-          // Target output
           expect(
             find.text(
                 'Target: ${result.exercise.targetOutput} ${_getUnitString(result.exercise.unit)}'),
             findsOneWidget,
           );
 
-          // Actual output
           expect(
             find.text(
                 'Achieved: ${result.actualOutput} ${_getUnitString(result.exercise.unit)}'),
             findsOneWidget,
           );
 
-          // Percentage achieved
           final percentageAchieved =
               (result.actualOutput / result.exercise.targetOutput * 100)
                   .round();
           expect(find.text('$percentageAchieved%'), findsOneWidget);
 
-          // Exercise icon
           expect(
             find.byWidgetPredicate(
               (widget) =>
@@ -514,7 +476,6 @@ void main() {
             findsOneWidget,
           );
 
-          // Verify progress indicator exists
           expect(
             find.byWidgetPredicate(
               (widget) =>
